@@ -1,0 +1,33 @@
+field,"account.invoice,business_id",0,Business,Affaire
+field,"business.business,purchases",0,Purchases,Achats
+field,"business.business,code",0,Business Number,Numéro Affaire
+field,"business.business,name",0,Business,Affaire
+field,"business.business,invoices",0,Invoices,Factures
+field,"business.business,date_end",0,End Date,Date fin
+field,"business.business,date_start",0,Start Date,Date Début
+field,"business.business,sales",0,Sales,Ventes
+field,"business.business,analytic_account",0,Analytic Account,Compte Analytique
+field,"business.business,projects",0,Projects,Projets
+model,"ir.model,name",191,business affair,Affaire
+model,"ir.model,name",192,business affair,Affaire
+model,"ir.model,name",193,Make a supplier product list,
+model,"ir.model,name",194,Partners from business sales,Partenaires des ventes d'une affaire
+model,"ir.model,name",195,Partners from business sales,Partenaires des ventes d'une affaire
+model,"ir.model,name",196,Partners from business purchases,Partenaire des achats d'une affaire
+model,"ir.model,name",197,Partners from business invoices,Partenaires des factures d'une affaire
+model,"ir.model,name",198,Partners from business,Partenaires d'une affaire
+model,"ir.ui.menu,name",438,Business,Affaire
+model,"ir.ui.menu,name",439,Business Affair,Affaire
+field,"partner.from.invoice,business_id",0,Business,Affaire
+field,"partner.from.list,business_id",0,Business,Affaire
+field,"partner.from.purchase,business_id",0,Business,Affaire
+field,"partner.from.sale,business_id",0,Business,Affaire
+field,"purchase.order,business_id",0,Business,Affaire
+field,"sale.order,business_id",0,Business,Affaire
+view,business.business,0,Business,Affaire
+view,business.business,0,Affair,Affaire
+view,business.business,0,Sales,Ventes
+view,business.business,0,Purchases,Achats
+view,business.business,0,Invoices,Factures
+view,business.business,0,Projects,Projets
+view,business.business,0,Business,Affaire

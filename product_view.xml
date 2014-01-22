@@ -1,0 +1,119 @@
+<openerp>
+  <data>
+
+<!-- product_product views & actions -->
+
+	<!--========================================== Form view ===================================== -->
+
+		<record model="ir.ui.view" id="product_normal_form_business_inherit">
+			<field name="name">product.normal.form.business.inherit</field>
+			<field name="model">product.product</field>
+			<field name="inherit_id" ref="product.product_normal_form_view"/>
+			<field name="arch" type="xml">
+<!--
+				<xpath expr="/form/sheet/field[@name='sale_ok']" position="after" >
+-->
+				<field name="categ_id" position="after" >
+					<div name="business_options" groups="">
+					<field name="business_product_ok" on_change="onchange_business_product_ok(business_product_ok)" />
+                                	<label for="business_product_ok"/>
+					<field name="business_system_ok" on_change="onchange_business_system_ok(business_system_ok)" />
+                                	<label for="business_system_ok"/>
+					</div>
+				</field>
+<!--
+				</xpath>
+-->
+			</field>
+		</record>
+
+	<!--========================================== Actions ===================================== -->
+
+	<record id="action_business_product_tree" model="ir.actions.act_window">
+            <field name="name">Systèmes et Equipements</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.product</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="product.product_search_form_view"/>
+            <field name="context">{'default_type': 'product'}</field>
+            <field name="domain">['|',('business_system_ok','=',True),('business_product_ok','=',True)]</field>
+            <field name="groups"></field>
+            <field name="help"></field>
+        </record>
+        
+        <record id="act_business_product_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="product.product_product_tree_view"/>
+            <field name="act_window_id" ref="action_business_product_tree"/>
+        </record>
+        
+        <record id="act_business_product_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="product.product_normal_form_view"/>
+            <field name="act_window_id" ref="action_business_product_tree"/>
+        </record>
+
+<!-- PMC views & actions -->
+
+	<!--========================================== Search view ===================================== -->
+     <record model="ir.ui.view" id="view_pmc_search">
+	<field name="name">product.market.combination.search</field>
+	<field name="model">product.market.combination</field>
+	<field name="type">search</field>
+	<field name="arch" type="xml">
+	    <search string="Product Market Combination">
+		<field name="name"/>
+	    </search>
+	</field>
+     </record>
+
+	<!--========================================== Form view ===================================== -->
+    <record model="ir.ui.view" id="view_pmc_form">
+      <field name="name">product.market.combination.form</field>
+      <field name="model">product.market.combination</field>
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+	<form string="Product Market Combination">
+	<field name="name"/>
+	<field name="description"/>
+	<field name="pmc_line_ids" nolabel="0" widget="one2many_list" colspan="5" string="Sous-familles">
+		<tree editable="bottom">
+			<field name="name"/>
+			<field name="description"/>
+		</tree>
+	</field>
+	</form>
+      </field>
+    </record>
+
+
+	<!--========================================== Tree view ===================================== -->
+    <record model="ir.ui.view" id="view_pmc_tree">
+      <field name="name">product.market.combination.tree</field>
+      <field name="model">product.market.combination</field>
+      <field name="type">tree</field>
+      <field name="arch" type="xml">
+	<field name="name"/>
+	<field name="description"/>
+      </field>
+    </record>
+
+	<!--========================================== Actions ===================================== -->
+        <record id="action_business_pmc_tree" model="ir.actions.act_window">
+            <field name="name">Product Market Combination</field>
+            <field name="res_model">product.market.combination</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="search_view_id" ref="view_pmc_search"/>
+            <field name="groups"></field>
+            <field name="help"></field>
+        </record>
+
+ </data>
+</openerp> 

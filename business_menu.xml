@@ -1,0 +1,23 @@
+<openerp>
+  <data>
+
+<!-- menu view -->
+  <menuitem name="Business"  id="base.menu_business_root" sequence="1"/>
+
+  <menuitem name="Business Management" id="menu_business_management" parent="base.menu_business_root" sequence="0"/>
+  	<menuitem name="Affaire" id="menu_business_management_affair" parent="menu_business_management" action="business_form_action" sequence="0"/>
+
+  <menuitem name="Business Formation" id="menu_business_formation" parent="base.menu_business_root" sequence="1"/>
+  	<menuitem name="Training Centers" id="menu_business_formation_center" parent="menu_business_formation" action="action_business_training_center_tree" sequence="0"/>
+  	<menuitem name="Master Trainers" id="menu_business_formation_trainers" parent="menu_business_formation" action="action_business_partner_tree" sequence="1"/>
+  	<menuitem name="Formations" id="menu_business_formation_formation" parent="menu_business_formation" action="action_business_formation_tree" sequence="2"/>
+
+  <menuitem name="Configuration" id="menu_business_config" parent="base.menu_business_root" sequence="2"/>
+  	<menuitem name="PMC" id="menu_business_config_pmc" parent="menu_business_config" action="action_business_pmc_tree" sequence="0"/>
+  	<menuitem name="Catégories de partenaires" id="menu_business_config_partner_groups" parent="menu_business_config" action="action_business_partner_category_tree" sequence="1"/>
+  	<menuitem name="Systèmes et équipements" id="menu_business_config_products" parent="menu_business_config" action="action_business_product_tree" sequence="2"/>
+  	<menuitem name="Etats d'une affaire" id="menu_business_config_stats" parent="menu_business_config" action="action_business_stats_tree" sequence="3"/>
+ 
+  
+ </data>
+</openerp>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+    <data noupdate="1">
+
+        <!-- Sequence types for business_business -->
+	<record id="seq_type_business_business" model="ir.sequence.type">
+            <field name="name">business</field>
+            <field name="code">business.business</field>
+        </record>
+
+        <!-- Sequences for business_business -->
+	<record id="seq_business_business" model="ir.sequence">
+            <field name="name">business</field>
+            <field name="code">business.business</field>
+            <field name="prefix">AFF/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</openerp>

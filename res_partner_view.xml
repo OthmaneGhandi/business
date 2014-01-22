@@ -1,0 +1,115 @@
+<openerp>
+  <data>
+
+<!-- res_partner views & actions -->
+
+    <!-- tree view -->
+    <record model="ir.ui.view" id="view_partner_tree_business_inherit">
+      <field name="name">partner.tree.business.inherit</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_partner_tree" />
+      <field name="type">tree</field>
+      <field name="arch" type="xml">
+      	<field name="name" position="after" >
+		<field name="business_trainer_ok" invisible="1"/>
+	</field>
+      </field>
+    </record>
+
+    <!-- form view -->
+    <record model="ir.ui.view" id="view_partner_form_business_inherit">
+      <field name="name">partner.form.business.inherit</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_partner_form" />
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+      	<field name="name" position="after" >
+		<field name="business_trainer_ok"/>
+	</field>
+      </field>
+    </record>
+
+    <!--Actions-->
+        <record id="action_business_partner_tree" model="ir.actions.act_window">
+            <field name="name">Master trainers</field>
+            <field name="res_model">res.partner</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('business_trainer_ok','=',True)]</field>
+            <field name="context">{'default_business_trainer_ok': True}</field>
+            <field name="groups"></field>
+            <field name="help"></field>
+        </record>
+
+        <record id="act_business_partner_tree_w" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_partner_tree_business_inherit"/>
+            <field name="act_window_id" ref="action_business_partner_tree"/>
+        </record>
+        
+        <record id="act_business_partner_form_w" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_partner_form_business_inherit"/>
+            <field name="act_window_id" ref="action_business_partner_tree"/>
+        </record>
+
+<!-- res_partner_category views & actions -->
+
+    <!-- tree view -->
+    <record model="ir.ui.view" id="view_partner_category_tree_business_inherit">
+      <field name="name">partner.category.tree.business.inherit</field>
+      <field name="model">res.partner.category</field>
+      <field name="inherit_id" ref="base.view_partner_category_tree" />
+      <field name="type">tree</field>
+      <field name="arch" type="xml">
+      	<field name="name" position="after" >
+		<field name="business_category_ok" invisible="1"/>
+	</field>
+      </field>
+    </record>
+
+    <!-- form view -->
+    <record model="ir.ui.view" id="view_partner_category_form_business_inherit">
+      <field name="name">partner.category.form.business.inherit</field>
+      <field name="model">res.partner.category</field>
+      <field name="inherit_id" ref="base.view_partner_category_form" />
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+      	<field name="name" position="after" >
+		<field name="business_category_ok"/>
+	</field>
+      </field>
+    </record>
+
+    <!--Actions-->
+        <record id="action_business_partner_category_tree" model="ir.actions.act_window">
+            <field name="name">Catégories de partenaires</field>
+            <field name="res_model">res.partner.category</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('business_category_ok','=',True)]</field>
+            <field name="context">{'default_business_category_ok': True}</field>
+            <field name="groups"></field>
+            <field name="help"></field>
+        </record>
+
+        <record id="act_business_partner_category_tree_w" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_partner_category_tree_business_inherit"/>
+            <field name="act_window_id" ref="action_business_partner_category_tree"/>
+        </record>
+        
+        <record id="act_business_partner_category_form_w" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_partner_category_form_business_inherit"/>
+            <field name="act_window_id" ref="action_business_partner_category_tree"/>
+        </record>
+
+ </data>
+</openerp> 

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+<!-- =======  business stats ======== -->
+
+    <record id="data_business_state_approach" model="business.state">
+        <field name="name">Discussion d'approche</field>
+        <field name="percentage">0</field>
+    </record>
+    
+    <record id="data_business_state_advanced" model="business.state">
+        <field name="name">Discussion avancée</field>
+        <field name="percentage">30</field>
+    </record>
+    
+    <record id="data_business_state_technical" model="business.state">
+        <field name="name">Négociation technique</field>
+        <field name="percentage">50</field>
+    </record>
+    
+    <record id="data_business_state_commercial" model="business.state">
+        <field name="name">Négociation commerciale</field>
+        <field name="percentage">80</field>
+    </record>
+    
+    <record id="data_business_state_executed" model="business.state">
+        <field name="name">Commande effectuée</field>
+        <field name="percentage">100</field>
+    </record>  
+    
+    <record id="data_business_state_aborted" model="business.state">
+        <field name="name">Projet avorté</field>
+        <field name="percentage">0</field>
+    </record>                  
+
+
+    </data>
+</openerp>    

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+          <menuitem id="base.menu_affaire_report" name="Affaire"            
+            parent="base.menu_reporting"
+            sequence="20"/> 
+
+        <record id="view_equipment_affaire_user_tree" model="ir.ui.view">
+            <field name="name">report.affaire.equipment.user.tree</field>
+            <field name="model">report.affaire.equipment.user</field>
+            <field name="arch" type="xml">
+                <tree string="business Analysis" create="false">
+                	<field name="creation_year" invisible="1"/>
+                	<field name="creation_month" invisible="1"/>
+                	<field name="creation_day" invisible="1"/>                
+                    <field name="name_template" invisible="1"/>
+                    <field name="country" invisible="1"/>
+                    <field name="region" invisible="1"/>
+                    <field name="business_id" invisible="1"/>
+                    <field name="sys_business_id" invisible="1"/>
+                    <field name="nbr"/>
+                    <field name="product_qty_planned"/>
+                    <field name="product_qty_used"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_equipment_affaire_user_graph" model="ir.ui.view">
+            <field name="name">report.affaire.equipment.user.graph</field>
+            <field name="model">report.affaire.equipment.user</field>
+            <field name="arch" type="xml">
+                <graph string="business Analysis" type="bar">
+                     <field name="name_template"/>                     
+                     <field name="product_qty_planned" operator="+"/>
+                     <field name="product_qty_used" operator="+"/>
+                 </graph>
+             </field>
+        </record>
+
+        <record id="view_equipment_affaire_user_search" model="ir.ui.view">
+            <field name="name">report.affaire.equipment.user.search</field>
+            <field name="model">report.affaire.equipment.user</field>
+            <field name="arch" type="xml">
+                <search string="business Analysis">
+                    <filter icon="terp-personal" name="business_product_ok" string="Equipements" domain="[('business_product_ok','=', True)]" help="Faire apparaître les équipements des affaires "/>
+                    <filter icon="terp-personal" name="business_system_ok" string="Systèmes" domain="[('business_system_ok','=', True)]" help="Faire apparaître les systèmes des affaires "/>                
+                    <group expand="1" string="Group By...">
+                        <filter string="Affaire par equipement" name="Affaire" icon="terp-folder-violet" context="{'group_by':'business_id'}"/>
+                        <filter string="Affaire par système" name="sys_Affaire" icon="terp-folder-violet" context="{'group_by':'sys_business_id'}"/>
+                        <filter string="Produit" icon="terp-stock_align_left_24" context="{'group_by':'name_template'}" />
+                        <separator orientation="vertical" />
+                        <filter string="Year" icon="terp-go-year"
+                            domain="[]" context="{'group_by':'creation_year'}"/>
+                        <filter string="Month" icon="terp-go-month"
+                            domain="[]" context="{'group_by':'creation_month'}"/>
+                        <filter string="Day" icon="terp-go-today"
+                            domain="[]" context="{'group_by':'creation_day'}"/> 
+                        <separator orientation="vertical" />
+                        <filter string="Pays" icon="terp-stock_align_left_24" context="{'group_by':'country'}" />
+                        <filter string="Région" icon="terp-stock_align_left_24" context="{'group_by':'region'}" />                           
+                    </group>
+                </search>
+            </field>
+        </record>
+
+       <record id="action_affaire_equipment_user_tree" model="ir.actions.act_window">
+            <field name="name">Analyse des affaires</field>
+            <field name="res_model">report.affaire.equipment.user</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,graph</field>
+            <field name="search_view_id" ref="view_equipment_affaire_user_search"/>
+            <field name="context">{'search_default_project':1}</field>
+            <field name="help">Ce rapport vous permet d'avoir un contrôle et une analyse des quatités prévues et utilisés de chaque produit par rapport aux affaires (projets) de votre société</field>
+        </record>
+
+       <menuitem  action="action_affaire_equipment_user_tree" id="menu_affaire_equipment_user_tree" parent="base.menu_affaire_report"/>     
+
+    </data>
+</openerp>

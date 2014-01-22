@@ -1,0 +1,648 @@
+<openerp>
+  <data>
+  
+<!-- ====================== product view ====================================== -->
+
+    <record model="ir.ui.view" id="view_product_form">
+      <field name="name">project.project.form</field>
+      <field name="model">project.project</field>
+      <field name="inherit_id" ref="project.edit_project" />
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+         <page string="Project Stages" position="after">
+         	<page string="Desription">
+         		<field name="description"/>
+         	</page>
+         </page>  
+      </field>
+    </record>  
+  
+<!-- ====================== Res partner view ====================================== -->
+
+    <record model="ir.ui.view" id="view_res_partner_form">
+      <field name="name">res.partner.form</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_partner_form" />
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+        <field name="customer" position="before" >
+	  		<field name="partner"/>
+	 	</field>  
+      </field>
+    </record>
+  
+      <record model="ir.ui.view" id="view_res_partner_filter">
+      <field name="name">res.partner.select</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_res_partner_filter" />
+      <field name="type">search</field>
+      <field name="arch" type="xml">
+		<xpath expr="//filter[@name='customer']" position="before">
+   			<filter string="Partner" name="partner" domain="[('partner','=','1')]" help="Partenaire"/>
+		</xpath>  
+      </field>
+    </record>
+  
+<!--     sale view	-->
+    <record model="ir.ui.view" id="view_order_tree_business">
+      <field name="name">sale.order.tree</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_order_tree" />
+      <field name="type">tree</field>
+      <field name="arch" type="xml">
+      <field name="partner_id" position="before" >
+	<field name="business_id"/>
+	</field>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_order_form_business">
+      <field name="name">sale.order.form</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_order_form" />
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+        <field name="project_id" position="before" >
+	  <field name="business_id" select="1" on_change="onchange_business_id(business_id)"/>
+	</field>  
+      </field>
+    </record>
+
+<!-- 	purchase view -->
+<!-- 
+    <record model="ir.ui.view" id="purchase_order_form_business">
+      <field name="name">purchase.order.form</field>
+      <field name="model">purchase.order</field>
+      <field name="inherit_id" ref="purchase.purchase_order_form"/>
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+	<field name="partner_ref" position="after" >
+	  <field name="business_id" select="1" />
+	</field>			
+      </field>
+    </record>
+-->
+    <record model="ir.ui.view" id="purchase_order_form_business">
+      <field name="name">purchase.order.form</field>
+      <field name="model">purchase.order</field>
+      <field name="inherit_id" ref="purchase.purchase_order_form"/>
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+
+    		<field name="partner_ref" position="after" >
+	  		<field name="business_id" on_change="onchange_business_id(business_id)" select="1" />
+	  		<field name="analytic_account_id"/>
+		</field>
+		<xpath expr="/form/sheet/notebook/page[@string='Purchase Order']/field[@name='order_line']/tree/field[@name='account_analytic_id']" position="replace" >
+			<field name="account_analytic_id" groups="purchase.group_analytic_accounting" domain="[('type','not in',('view','template')),('id','=',parent.analytic_account_id)]" invisible="0"/>
+		</xpath>
+<!--
+		<field name="order_line" position="atrributes" >
+			<attribute name="context">{'default_analytic_account_id': analytic_account_id}</attribute>
+	  		<field name="order_line" widget="one2many_list" context="{'default_analytic_account_id': analytic_account_id}"/>
+		</field>
+-->
+      </field>
+    </record>
+ 
+    <record model="ir.ui.view" id="purchase_order_tree_business">
+      <field name="name">purchase.order.tree</field>
+      <field name="model">purchase.order</field>
+      <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+      <field name="type">tree</field>
+      <field name="arch" type="xml">
+	<field name="date_order" position="after" >
+	  <field name="business_id" select="1"/>
+	</field>			
+      </field>
+    </record>
+<!--
+    <record model="ir.ui.view" id="purchase_order_line_form">
+        <field name="name">purchase.order.line.form</field>
+        <field name="model">purchase.order.line</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="purchase.purchase_order_line_form" />
+        <field name="arch" type="xml">
+         
+            <field name="account_analytic_id" position="replace" >
+                <field 
+                    name="account_analytic_id" colspan="3" 
+                    context="{'business_id': parent.business_id}"/>
+            </field>         
+
+            <field name="account_analytic_id" position="before" >
+                <field name="business_id" on_change="onchange_business_id(business_id)"/>
+            </field>
+                        
+        </field>
+    </record>
+   -->
+   
+<!--	invoice view	-->
+    <record model="ir.ui.view" id="invoice_tree_business">
+      <field name="name">account.invoice.tree</field>
+      <field name="model">account.invoice</field>
+      <field name="inherit_id" ref="account.invoice_tree"/>
+      <field name="type">tree</field>
+      <field name="arch" type="xml">
+	<field name="number" position="after" >
+	  <field name="business_id" select="1"/>
+	</field>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="invoice_form_business">
+      <field name="name">account.invoice.form</field>
+      <field name="model">account.invoice</field>
+      <field name="inherit_id" ref="account.invoice_form"/>
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+	<field name="currency_id" position="after" >
+	  <field name="business_id" select="1"/>
+	</field>
+      </field>
+    </record>
+
+<!--	Project view	-->
+    <record model="ir.ui.view" id="edit_project_business">
+      <field name="name">project.project.form</field>
+      <field name="model">project.project</field>
+      <field name="inherit_id" ref="project.edit_project"/>
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+	<field name="partner_id" position="after" >
+	  <field name="business_id" select="1" on_change="onchange_business_id(business_id)"/>
+	</field>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_project_business">
+      <field name="name">project.project.tree</field>
+      <field name="model">project.project</field>
+      <field name="inherit_id" ref="project.view_project"/>     
+      <field name="type">tree</field>
+      <!-- <field name="field_parent">child_id</field> -->
+      <field name="arch" type="xml">
+	<field name="user_id" position="after" >
+	  <field name="business_id" select="1"/>
+	</field>
+      </field>
+    </record>
+
+<!--	Business affair view	-->
+
+<!--  ================ business search ===================== -->
+
+        <record id="business_search" model="ir.ui.view">
+            <field name="name">business.search.form</field>
+            <field name="model">business.business</field>
+            <field name="arch" type="xml">
+                <search string="business">       
+                   <group  expand='0' string='Group by...'>
+                       <filter string='Affaire' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'description'}"/>                                                                    
+                   </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Business Kanban View  -->
+        <record model="ir.ui.view" id="business_kanban_view">
+            <field name="name">business.kanban.view</field>
+            <field name="model">business.business</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="state">
+                    <field name="state" groups="base.group_no_one"/>
+                    <templates>
+                        <field name="date_start"/>
+                        <field name="date_end"/>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
+                                <div class="oe_dropdown_toggle oe_dropdown_kanban">
+                                    <span class="oe_e">í</span>
+                                    <ul class="oe_dropdown_menu">
+                                        <t t-if="widget.view.is_action_enabled('edit')"><li><a type="edit">Edit...</a></li></t>
+                                        <t t-if="widget.view.is_action_enabled('delete')"><li><a type="delete">Delete</a></li></t>
+                                        <li><a name="%(mail.action_email_compose_message_wizard)d" type="action">Send Email</a></li>
+                                        <li><ul class="oe_kanban_colorpicker" data-field="color"/></li>
+                                    </ul>
+                                </div>
+                                <div class="oe_kanban_content">
+                                    <div>
+                                        <b><field name="description"/></b>
+                                    </div>
+                                    <div>
+                                        <field name="promo_id"/>
+                                    </div>
+                                    <div>
+                                        <field name="contact_id"/>
+                                    </div>
+                                    <div style="padding-left: 0.5em">
+                                        <t t-if="record.date_start.raw_value and record.date_start.raw_value lt (new Date())" t-set="red">oe_kanban_text_red</t>
+                                        <span t-attf-class="#{red || ''}"><field name="date_start"/></span>
+                                    </div>
+                                    <!-- 
+                                    <div class="oe_kanban_bottom_right">
+                                        <a t-if="record.priority.raw_value == 1" type="object" name="set_normal_priority" class="oe_e oe_star_on">7</a>
+                                        <a t-if="record.priority.raw_value != 1" type="object" name="set_high_priority" class="oe_e oe_star_off">7</a>
+                                        <img t-att-src="kanban_image('res.users', 'image_small', record.user_id.raw_value)" t-att-title="record.user_id.value" width="24" height="24" class="oe_kanban_avatar" t-if="record.user_id.value"/>
+                                    </div>
+                                    <div class="oe_kanban_footer_left">
+                                        <t t-raw="record.message_summary.raw_value"/>
+                                    </div>
+                                    -->
+                                </div>
+                                <div class="oe_clear"></div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+    <record model="ir.ui.view" id="business_form">
+      <field name="name">business.business.form</field>
+      <field name="model">business.business</field>
+      <field name="type">form</field>
+      <field name="arch" type="xml">      
+	<form string="Business" version="7.0">	
+	<sheet>
+          <notebook>
+	    <page string="Affaire">
+		<group colspan="4" col="4">
+		    <group colspan="2" col="2">
+              		<field name="name"/>
+              		<field name="description" />
+              		<field name="date_start" select="1"/>
+              		<field name="date_end" select="1"/>
+              		<field name="affair_location" />
+              		<field name="country_id" placeholder="pays"/>
+              		<field name="region" />
+              		<!-- <field name="promo_id" />  --> 
+              		<!-- <field name="promo_id" widget="many2many_tags" placeholder="Tags..."/> -->
+              		<!-- <field name="contact_id" on_change="onchange_contact_id(contact_id)"/> -->
+              		<!-- <field name="contact" /> -->
+		    </group>
+		    <group colspan="2" col="2">
+              		<field name="pmc_id" on_change="onchange_pmc_id(pmc_id)"/>
+              		<field name="pmc_line_id"/>
+              		<field name="analytic_account" select="2"/>
+              		<field name="business_need" />
+              		<field name="onduline_ok" on_change="onchange_onduline_ok(onduline_ok)"/>
+			<field name="date_prob" attrs="{'required': [('onduline_ok','=',True)]}"/>
+			<!-- 
+			<field name="products_volume" attrs="{'invisible': [('onduline_ok','=',False)], 'required': [('onduline_ok','=',True)]}"/>
+			<field name="systems_volume" attrs="{'invisible': [('onduline_ok','=',False)], 'required': [('onduline_ok','=',True)]}"/>
+			<field name="vol_uom_id" attrs="{'invisible': [('onduline_ok','=',False)], 'required': [('onduline_ok','=',True)]}"/>
+						-->
+              		<field name="hunting_pack_ok" />
+              		<field name="color" invisible="1"/>
+              		<field name="user_id" invisible="1"/>
+              		<field name="state"/>
+              		<field name="percentage" widget="integer" on_change="onchange_qty_used(percentage)"/>
+		    </group>
+		</group>
+		<notebook>
+		    <page string="Types de réalisation">
+			<field name="plannings" nolabel="1">
+			    <tree editable="bottom">
+				<field name="type"/>
+				<field name="qty"/>
+				<field name="plan"/>
+			    </tree>
+			</field>
+		    </page>
+		    <page string="Financement/Promoteur">
+		    	<field name="promo_id" widget="many2many" select="2" nolabel="1"/>
+		    </page>
+		    <page string="Equipements" attrs="{'invisible': [('business_need','=','syst')]}">
+			<field name="products" widget="one2many_list" nolabel="1">
+			    <tree editable="bottom">
+				<field name="product_id" string="Produit" required="1" on_change="onchange_product_id(product_id)" domain="[('business_product_ok','=',True)]"/>
+				<field name="uom_id"/>
+				<field name="price" required="1"/>
+				<field name="product_qty_planned" required="1"/>
+				<field name="product_qty_used" required="1"/>
+			    </tree>
+			</field>
+			<group class="oe_subtotal_footer oe_right">
+				<lib>
+					<button name="button_reset_qty_used" string="(MettreAjour)" type="object" class="oe_link oe_edit_only oe_highlight" help="Recalculer les quantités utilisés"/>
+				</lib>
+			</group>	
+		    </page>
+		    <page string="Systèmes" attrs="{'invisible': [('business_need','=','equip')]}">
+			<field name="systems" widget="one2many_list" nolabel="1">
+			    <tree editable="bottom">
+				<field name="product_id" string="Système" required="1" on_change="onchange_product_id(product_id)" domain="[('business_system_ok','=',True)]"/>
+				<field name="uom_id"/>
+				<field name="price" required="1"/>
+				<field name="product_qty_planned" required="1"/>
+				<field name="product_qty_used" required="1"/>
+			    </tree>
+			</field>
+		    </page>
+		    
+		    <page string="Contact(s)">
+		    <field name="contact" widget="many2many" select="2" nolabel="1"/>			
+		    </page>		    
+		    
+		    <page string="Partenaires et Technologies" attrs="{'invisible': [('hunting_pack_ok','=',False)]}">
+			<field name="tech_partners" nolabel="1">
+			    <tree editable="bottom">
+				<field name="partner_id"/>
+				<field name="product_id"/>
+				<field name="disposition"/>
+			    </tree>
+			</field>
+		    </page>
+		    <page string="Partenaires" attrs="{'invisible': [('hunting_pack_ok','=',False)]}">
+		    	<field name="contact_id" widget="many2many" select="2" nolabel="1"/>
+		    </page>
+		</notebook>
+	    </page>
+            <page string="Ventes">
+              <field name="sales" widget="many2many" select="2" nolabel="1"/>
+            </page>
+            <page string="Achats">
+              <field name="purchases" widget="many2many" select="2" nolabel="1"/>
+            </page>
+            <page string="Factures">
+              <field name="invoices" widget="many2many" select="2" nolabel="1"/>
+            </page>
+            <page string="Projets">
+              <field name="projects" widget="many2many" select="2" nolabel="1"/>
+	    </page>
+<!--	    <page string="Partners">
+      	      <field name="list_partners" select="2" domain="[('business_id', '=', business_id)]">
+	        <tree string="Partners">
+  		  <field name="partner_id"/>
+                </tree>
+              </field>
+            </page>		-->
+          </notebook>
+          </sheet>
+	</form>
+      </field>
+    </record> 
+
+    <record model="ir.ui.view" id="business_tree">
+      <field name="name">business.business.tree</field>
+      <field name="model">business.business</field>
+      <field name="type">tree</field>
+      <field name="arch" type="xml">      
+	<tree string="Business">
+              <field name="name" select="1"/>
+              <field name="description" select="1"/>
+              <field name="date_start" select="1"/>
+              <field name="date_end" select="1"/>
+              <field name="analytic_account" select="2"/>            
+<!--	      <field name="list_partners" select="2"/>	-->
+  	      <field name="sales" select="2"/>
+	      <field name="purchases" select="2"/>
+	      <field name="invoices" select="2"/>
+	      <field name="projects" select="2"/>
+          <field name="color" invisible="1"/>
+          <field name="user_id" invisible="0"/>
+	</tree>
+      </field>
+    </record> 
+
+
+    <record model="ir.actions.act_window" id="business_form_action">
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">business.business</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_id" ref="business_form"/>
+      <field name="search_view_id" ref="business_search"/>
+    </record>
+
+        <record id="business_tree_w" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="business_tree"/>
+            <field name="act_window_id" ref="business_form_action"/>
+        </record>
+        
+        <record id="business_form_w" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="business_form"/>
+            <field name="act_window_id" ref="business_form_action"/>
+        </record>
+        <!-- 
+        <record id="business_kanban_w" model="ir.actions.act_window.view">
+            <field eval="0" name="sequence"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="business_kanban_view"/>
+            <field name="act_window_id" ref="business_form_action"/>
+        </record>
+        -->
+        
+<!--	Business formation view	-->
+
+    <record id="business_formation_search" model="ir.ui.view">
+        <field name="name">business.formation.search</field>
+        <field name="model">business.formation</field>
+        <field name="arch" type="xml">
+             <search string="Formations">
+		<field name="center_id"/>
+		<newline/>
+                <group expand="0" string="Group By...">
+		     <filter string="center_id" name="group_center_id" domain="[]"  context="{'group_by':'center_id'}"/>
+		</group>
+	     </search>
+        </field>
+    </record> 
+
+    <record model="ir.ui.view" id="business_formation_form">
+      <field name="name">business.formation.form</field>
+      <field name="model">business.formation</field>
+      <field name="type">form</field>
+      <field name="arch" type="xml">      
+	   <form string="Formation">
+		<field name="center_id"/>
+		<newline/>
+		<notebook>
+			<page string="Master trainers">
+				<field name="trainer_cost_ids" nolabel="1" widget="one2many_list">
+				<tree editable="bottom">
+					<field name="trainer_id"/>
+					<field name="level"/>
+					<field name="cost"/>
+				</tree>
+				</field>
+			</page>
+			<page string="Trainees">
+				<field name="trainee_ids" nolabel="1" widget="many2many">
+				<tree>
+					<field name="name"/>
+				</tree>
+				</field>
+			</page>
+			<page string="Plan de formation">
+				<field name="formation_plan_ids" nolabel="1" widget="one2many_list">
+				<tree editable="bottom">
+					<field name="employee_type"/>
+					<field name="qty"/>
+					<field name="date"/>
+				</tree>
+				</field>
+			</page>
+		</notebook>
+	   </form>
+	   </field>
+    </record> 
+    
+    <record model="ir.ui.view" id="business_formation_tree">
+      <field name="name">business.formation.tree</field>
+      <field name="model">business.formation</field>
+      <field name="type">tree</field>
+      <field name="arch" type="xml">      
+	   <tree string="Formations">
+		<field name="center_id"/>
+	   </tree>
+      </field>
+    </record> 
+    
+    <record model="ir.actions.act_window" id="action_business_formation_tree">
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">business.formation</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_id" ref="business_formation_tree"/>
+      <field name="search_view_id" ref="business_formation_search"/>
+    </record>
+
+<!--	Business Training center view	-->
+
+    <record id="business_training_center_search" model="ir.ui.view">
+        <field name="name">business.training.center.search</field>
+        <field name="model">business.training.center</field>
+        <field name="arch" type="xml">
+             <search string="Training center">
+		<field name="partner_id"/>
+		<newline/>
+                <group expand="0" string="Group By...">
+		     <filter string="Responsable" name="group_partner_id" icon="terp-personal" domain="[]"  context="{'group_by':'partner_id'}"/>
+		</group>
+	     </search>
+        </field>
+    </record> 
+
+    <record model="ir.ui.view" id="business_training_center_form">
+      <field name="name">business.training.center.form</field>
+      <field name="model">business.training.center</field>
+      <field name="type">form</field>
+      <field name="arch" type="xml">      
+	   <form string="Training center">
+		<field name="partner_id"/>
+		<field name="stock_goodies"/>
+	   </form>
+      </field>
+    </record> 
+
+    <record model="ir.ui.view" id="business_training_center_tree">
+      <field name="name">business.training.center.tree</field>
+      <field name="model">business.training.center</field>
+      <field name="type">tree</field>
+      <field name="arch" type="xml">      
+	   <tree string="Training center">
+		<field name="partner_id"/>
+		<field name="stock_goodies"/>
+	   </tree>
+      </field>
+    </record> 
+
+    <record model="ir.actions.act_window" id="action_business_training_center_tree">
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">business.training.center</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_id" ref="business_training_center_tree"/>
+      <field name="search_view_id" ref="business_training_center_search"/>
+    </record>
+    
+<!-- business state view -->
+    
+	<!--========================================== Tree view ===================================== -->
+    <record model="ir.ui.view" id="view_business_state_tree">
+      <field name="name">business.state.tree</field>
+      <field name="model">business.state</field>
+      <field name="type">tree</field>
+      <field name="arch" type="xml">
+      	<tree string="business state">
+			<field name="name"/>
+			<field name="percentage"/>
+		</tree>
+      </field>
+    </record>
+    
+<!--========================================== Form view ===================================== -->
+
+    <record model="ir.ui.view" id="view_business_state_form">
+      <field name="name">business.state.form</field>
+      <field name="model">business.state</field>
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+		<form string="Les états d'une affaire">
+			<field name="name"/>
+			<field name="percentage"/>
+		</form>
+      </field>
+    </record>
+
+    
+    <record model="ir.actions.act_window" id="action_business_stats_tree">
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">business.state</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_id" ref="view_business_state_tree"/>
+    </record>
+
+
+<!-- Actions -->
+ 
+  <act_window name="Affair's Orders "
+    domain="[('business_id', '=', active_id)]"
+    res_model="sale.order"
+    src_model="business.business"
+    view_type="form"
+    view_mode="tree,form"
+    id="act_view_order_tree_business"/>
+
+  <act_window name="Affair's Purchases "
+    domain="[('business_id', '=', active_id)]"
+    res_model="purchase.order"
+    src_model="business.business"
+    view_type="form"
+    view_mode="tree,form"
+    id="act_purchase_order_tree_business"/>
+
+  <act_window name="Affair's Invoices "
+    domain="[('business_id', '=', active_id)]"
+    res_model="account.invoice"
+    src_model="business.business"
+    view_type="form"
+    view_mode="tree,form"
+    id="act_invoice_tree"/>
+
+  <act_window name="Affair's Projects "
+    domain="[('business_id', '=', active_id)]"
+    res_model="project.project"
+    src_model="business.business"
+    view_type="form"
+    view_mode="tree,form"
+    id="act_view_project"/>
+
+  <act_window name="Analytic Account "
+    domain="[('id', '=', analytic_account)]"
+    res_model="account.analytic.account"
+    src_model="business.business"
+    view_type="form"
+    view_mode="tree,form"
+    id="hr_timesheet.account_analytic_account_form_form"/>
+
+ </data>
+</openerp> 
