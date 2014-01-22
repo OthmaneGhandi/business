@@ -25,7 +25,8 @@
     'version': '0.1',
     'category': 'Generic Modules/Others',
     'description': """
-This module regroup object for a business.""",
+This module regroup object for a business.
+This is just a test of git VCS (Version Control Systems)""",
     'author': 'Sednacom',
     'website': 'http://www.sednacom.fr',
     'depends': ['account', 'analytic', 'crm', 'sale', 'purchase', 'project', 'hr_timesheet'], #'contacts'
